@@ -239,5 +239,24 @@ FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodze
 
 -- f)
 
+SELECT (COALESCE(SUM(premia.kwota), 0) + SUM(pensja.kwota)) AS suma_wynagrodzeñ_wg_stanowiska, stanowisko
+FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji) LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii)
+GROUP BY stanowisko;
+
+-- g)
+
+SELECT (COALESCE(COUNT(premia.id_premii), 0)) AS liczba_premii, stanowisko
+FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji) LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii)
+GROUP BY stanowisko;
+
+--h)
+
+--SELECT *
+--FROM ((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
+
+
+DELETE ksiegowosc.pracownicy 
+FROM ksiegowosc.pracownicy, ksiegowosc.wynagrodzenie,  ksiegowosc.pensja
+WHERE pracownicy.id_pracownika = wynagrodzenie.id_pracownika AND pensja.id_pensji = wynagrodzenie.id_pensji AND pensja.kwota < 1200;
 
 
