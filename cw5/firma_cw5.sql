@@ -170,20 +170,20 @@ FROM ksiegowosc.pracownicy;
 -- b)
 
 SELECT DISTINCT id_pracownika 
-FROM (ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji
 WHERE kwota > 1000;
 
 -- c)
 
 SELECT id_pracownika 
-FROM (ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
-WHERE (kwota > 1000 AND id_premii IS NULL);
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji
+WHERE kwota > 2000 AND id_premii IS NULL;
 
 -- d)
 
 SELECT * 
 FROM ksiegowosc.pracownicy
-WHERE nazwisko LIKE 'J%';
+WHERE imie LIKE 'J%';
 
 -- e)
 
@@ -194,59 +194,59 @@ WHERE nazwisko LIKE '%n%' AND  imie LIKE '%a';
 -- f)
 
 SELECT DISTINCT imie, nazwisko, (liczba_godzin-160) AS nadgodziny 
-FROM (ksiegowosc.godziny INNER JOIN ksiegowosc.pracownicy ON godziny.id_pracownika = pracownicy.id_pracownika);
+FROM ksiegowosc.godziny INNER JOIN ksiegowosc.pracownicy ON godziny.id_pracownika = pracownicy.id_pracownika;
 
 -- g)
 
-SELECT imie, nazwisko
-FROM ((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
+SELECT imie, nazwisko, kwota
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji
 WHERE kwota > 1500 AND kwota < 3000;
 
 -- h)
 
 SELECT DISTINCT imie, nazwisko, (liczba_godzin-160) AS nadgodziny 
-FROM ((ksiegowosc.godziny INNER JOIN ksiegowosc.pracownicy ON godziny.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.wynagrodzenie ON wynagrodzenie.id_pracownika = godziny.id_pracownika)
+FROM ksiegowosc.godziny INNER JOIN ksiegowosc.pracownicy ON godziny.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.wynagrodzenie ON wynagrodzenie.id_pracownika = godziny.id_pracownika
 WHERE id_premii IS NULL AND (liczba_godzin-160) > 0;
 
 -- i)
 
 SELECT pracownicy.id_pracownika, imie, nazwisko, adres, telefon, pensja.id_pensji, kwota
-FROM ((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji
 ORDER BY kwota ASC;
 
 -- j)
 
 SELECT pracownicy.id_pracownika, imie, nazwisko, adres, telefon, pensja.kwota AS kwota_pensji, premia.kwota AS kwota_premii
-FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji) INNER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii)
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji INNER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii
 ORDER BY pensja.kwota DESC, premia.kwota DESC;
 
 -- k)
 
 SELECT COUNT(id_pracownika) AS liczba_pracownikow_na_stanowisku, stanowisko
-FROM  (ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
+FROM  ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji
 GROUP BY stanowisko;
 
 -- l)
 
 SELECT AVG(kwota) AS srednia_pensja, MIN(kwota) AS min_pensja, MAX(kwota) AS max_pensja
-FROM  (ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji)
+FROM  ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji
 WHERE stanowisko = 'Dyrektor';
 
 -- m)
 
 SELECT (SUM(premia.kwota) + SUM(pensja.kwota)) AS suma_wynagrodzeñ
-FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji) LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii)
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii
 
 -- f)
 
 SELECT (COALESCE(SUM(premia.kwota), 0) + SUM(pensja.kwota)) AS suma_wynagrodzeñ_wg_stanowiska, stanowisko
-FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji) LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii)
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii
 GROUP BY stanowisko;
 
 -- g)
 
 SELECT (COALESCE(COUNT(premia.id_premii), 0)) AS liczba_premii, stanowisko
-FROM (((ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika) INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji) LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii)
+FROM ksiegowosc.wynagrodzenie INNER JOIN ksiegowosc.pracownicy  ON wynagrodzenie.id_pracownika = pracownicy.id_pracownika INNER JOIN ksiegowosc.pensja ON wynagrodzenie.id_pensji = pensja.id_pensji LEFT OUTER JOIN ksiegowosc.premia ON wynagrodzenie.id_premii = premia.id_premii
 GROUP BY stanowisko;
 
 --h)
