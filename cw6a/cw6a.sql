@@ -29,19 +29,16 @@ FROM cw6.zamowienia;
 
 --1. zale¿noœci funkcyjne:
 
---id_produktu -> nazwa_produktu, id_klienta, nazwa_klienta, data_zamowienia, cena_produktu, iloœæ, VAT, suma_brutto, suma_netto
---nazwa_produktu -> id_produktu, id_klienta, nazwa_klienta, data_zamowienia, cena_produktu, iloœæ, VAT, suma_brutto, suma_netto
---nazwa_klienta -> nazwa_produktu, id_produktu, id_klienta, data_zamowienia, cena_produktu, iloœæ, VAT, suma_brutto, suma_netto
---VAT -> nazwa_klienta, nazwa_produktu, id_produktu, id_klienta, data_zamowienia, cena_produktu, iloœæ, VAT, suma_brutto, suma_netto
---id_klienta -> nazwa_klienta, nazwa_produktu, id_produktu, data_zamowienia, cena_produktu, iloœæ, VAT, suma_brutto, suma_netto
---suma_brutto -> suma_netto
---suma_netto -> suma_brutto
+--id_produktu -> nazwa_produktu, cena_produktu, VAT 
+--nazwa_produktu -> id_produktu, cena_produktu, VAT 
+--nazwa_klienta -> id_klienta
+--id_klienta -> nazwa_klienta
 --cena_produktu, iloœæ, VAT -> suma_brutto
 --cena_produktu, iloœæ -> suma_netto
 
 --2. klucze kandyduj¹ce
 
---id_produktu, id_klienta, VAT, nazwa_produktu
+--id_produktu, id_klienta + data_zamowienia
 
 
 --3. Dla tabeli pomieszczenia(id_pomieszczenia, numer_pomieszczenia, id_budynku, 
