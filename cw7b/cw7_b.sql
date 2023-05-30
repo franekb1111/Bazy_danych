@@ -28,11 +28,17 @@ CREATE PROCEDURE dbo.fibprint (@i INT)
 AS
 BEGIN
     DECLARE @result_p INT;
-    SET @result_p = dbo.fibonaccifun(@i);
-    PRINT @result_p;
+	DECLARE @iter INT;
+	SET @iter = 0;
+	WHILE(@iter < @i)
+	BEGIN 
+		SET @result_p = dbo.fibonaccifun(@iter);
+		PRINT CAST(@result_p AS VARCHAR(10));
+		SET @iter = @iter + 1;
+	END
 END;
 
-EXEC dbo.fibprint @i = 11;
+EXEC dbo.fibprint @i = 10;
 
 --2. Napisz trigger DML, który po wprowadzeniu danych do tabeli Persons zmodyfikuje nazwisko 
 --tak, aby by³o napisane du¿ymi literami. 
